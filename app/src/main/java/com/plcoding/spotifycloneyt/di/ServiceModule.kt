@@ -19,7 +19,7 @@ object ServiceModule {
 
     @ServiceScoped
     @Provides
-    fun providesAudioAttributes() = AudioAttributes.Builder()
+    fun provideAudioAttributes() = AudioAttributes.Builder()
         .setContentType(C.CONTENT_TYPE_MUSIC)
         .setUsage(C.USAGE_MEDIA)
         .build()
@@ -34,11 +34,21 @@ object ServiceModule {
         setHandleAudioBecomingNoisy(true)
     }
 
-    //A DataSource.Factory that produces DefaultDataSource instances that delegate to
-    // DefaultHttpDataSources for non-file/asset/content URIs.
     @ServiceScoped
     @Provides
     fun provideDataSourceFactory(
         @ApplicationContext context: Context
-    ) = DefaultDataSourceFactory(context, Util.getUserAgent(context, "Dpotify App"))
+    ) = DefaultDataSourceFactory(context, Util.getUserAgent(context, "Spotify App"))
 }
+
+
+
+
+
+
+
+
+
+
+
+
