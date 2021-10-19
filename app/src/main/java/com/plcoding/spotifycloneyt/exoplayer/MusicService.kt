@@ -15,10 +15,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import javax.inject.Inject
 
+private const val SERVICE_TAG = "MusicService"
 
-private const val SERVICE_TAG = "Music Service"
 @AndroidEntryPoint
-class MusicService : MediaBrowserServiceCompat(){
+class MusicService : MediaBrowserServiceCompat() {
 
     @Inject
     lateinit var dataSourceFactory: DefaultDataSourceFactory
@@ -34,38 +34,38 @@ class MusicService : MediaBrowserServiceCompat(){
 
     override fun onCreate() {
         super.onCreate()
-
         val activityIntent = packageManager?.getLaunchIntentForPackage(packageName)?.let {
-            PendingIntent.getActivity(this,0,it,0)
+            PendingIntent.getActivity(this, 0, it, 0)
         }
 
         mediaSession = MediaSessionCompat(this, SERVICE_TAG).apply {
             setSessionActivity(activityIntent)
             isActive = true
         }
+
         sessionToken = mediaSession.sessionToken
+
         mediaSessionConnector = MediaSessionConnector(mediaSession)
         mediaSessionConnector.setPlayer(exoPlayer)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        serviceScope.cancel()
+    }
 
     override fun onGetRoot(
         clientPackageName: String,
         clientUid: Int,
         rootHints: Bundle?
     ): BrowserRoot? {
-        TODO("Not yet implemented")
+
     }
 
     override fun onLoadChildren(
         parentId: String,
         result: Result<MutableList<MediaBrowserCompat.MediaItem>>
     ) {
-        TODO("Not yet implemented")
-    }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        serviceScope.cancel()
     }
 }
